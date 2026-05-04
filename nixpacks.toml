@@ -1,0 +1,11 @@
+[phases.setup]
+nixPkgs = ["nodejs_22"]
+
+[phases.build]
+cmds = [
+  "pnpm db:generate",
+  "pnpm build"
+]
+
+[start]
+cmd = "pnpm db:deploy && node dist/server.js"
