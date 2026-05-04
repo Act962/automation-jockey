@@ -18,14 +18,23 @@ model Consultant {
 }
 
 model Lead {
-  id           String   @id @default(cuid())
-  phone        String   @unique
+  id           String    @id @default(cuid())
+  phone        String    @unique
   name         String?
   consultantId String?
-  createdAt    DateTime @default(now())
+  createdAt    DateTime  @default(now())
+  uazapiToken  String?
+  redirectedAt DateTime?
 
   consultant   Consultant?   @relation(fields: [consultantId], references: [id])
   interactions Interaction[]
+}
+
+model AppConfig {
+  key         String   @id
+  value       String
+  description String   @default("")
+  updatedAt   DateTime @updatedAt
 }
 
 model Interaction {

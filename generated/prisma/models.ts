@@ -10,6 +10,7 @@
  */
 export type * from './models/Consultant.ts'
 export type * from './models/Lead.ts'
+export type * from './models/AppConfig.ts'
 export type * from './models/Interaction.ts'
 export type * from './models/MessageTemplate.ts'
 export type * from './models/RoundRobinState.ts'

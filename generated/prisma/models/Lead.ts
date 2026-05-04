@@ -30,6 +30,8 @@ export type LeadMinAggregateOutputType = {
   name: string | null
   consultantId: string | null
   createdAt: Date | null
+  uazapiToken: string | null
+  redirectedAt: Date | null
 }
 
 export type LeadMaxAggregateOutputType = {
@@ -38,6 +40,8 @@ export type LeadMaxAggregateOutputType = {
   name: string | null
   consultantId: string | null
   createdAt: Date | null
+  uazapiToken: string | null
+  redirectedAt: Date | null
 }
 
 export type LeadCountAggregateOutputType = {
@@ -46,6 +50,8 @@ export type LeadCountAggregateOutputType = {
   name: number
   consultantId: number
   createdAt: number
+  uazapiToken: number
+  redirectedAt: number
   _all: number
 }
 
@@ -56,6 +62,8 @@ export type LeadMinAggregateInputType = {
   name?: true
   consultantId?: true
   createdAt?: true
+  uazapiToken?: true
+  redirectedAt?: true
 }
 
 export type LeadMaxAggregateInputType = {
@@ -64,6 +72,8 @@ export type LeadMaxAggregateInputType = {
   name?: true
   consultantId?: true
   createdAt?: true
+  uazapiToken?: true
+  redirectedAt?: true
 }
 
 export type LeadCountAggregateInputType = {
@@ -72,6 +82,8 @@ export type LeadCountAggregateInputType = {
   name?: true
   consultantId?: true
   createdAt?: true
+  uazapiToken?: true
+  redirectedAt?: true
   _all?: true
 }
 
@@ -153,6 +165,8 @@ export type LeadGroupByOutputType = {
   name: string | null
   consultantId: string | null
   createdAt: Date
+  uazapiToken: string | null
+  redirectedAt: Date | null
   _count: LeadCountAggregateOutputType | null
   _min: LeadMinAggregateOutputType | null
   _max: LeadMaxAggregateOutputType | null
@@ -182,6 +196,8 @@ export type LeadWhereInput = {
   name?: Prisma.StringNullableFilter<"Lead"> | string | null
   consultantId?: Prisma.StringNullableFilter<"Lead"> | string | null
   createdAt?: Prisma.DateTimeFilter<"Lead"> | Date | string
+  uazapiToken?: Prisma.StringNullableFilter<"Lead"> | string | null
+  redirectedAt?: Prisma.DateTimeNullableFilter<"Lead"> | Date | string | null
   consultant?: Prisma.XOR<Prisma.ConsultantNullableScalarRelationFilter, Prisma.ConsultantWhereInput> | null
   interactions?: Prisma.InteractionListRelationFilter
 }
@@ -192,6 +208,8 @@ export type LeadOrderByWithRelationInput = {
   name?: Prisma.SortOrderInput | Prisma.SortOrder
   consultantId?: Prisma.SortOrderInput | Prisma.SortOrder
   createdAt?: Prisma.SortOrder
+  uazapiToken?: Prisma.SortOrderInput | Prisma.SortOrder
+  redirectedAt?: Prisma.SortOrderInput | Prisma.SortOrder
   consultant?: Prisma.ConsultantOrderByWithRelationInput
   interactions?: Prisma.InteractionOrderByRelationAggregateInput
 }
@@ -205,6 +223,8 @@ export type LeadWhereUniqueInput = Prisma.AtLeast<{
   name?: Prisma.StringNullableFilter<"Lead"> | string | null
   consultantId?: Prisma.StringNullableFilter<"Lead"> | string | null
   createdAt?: Prisma.DateTimeFilter<"Lead"> | Date | string
+  uazapiToken?: Prisma.StringNullableFilter<"Lead"> | string | null
+  redirectedAt?: Prisma.DateTimeNullableFilter<"Lead"> | Date | string | null
   consultant?: Prisma.XOR<Prisma.ConsultantNullableScalarRelationFilter, Prisma.ConsultantWhereInput> | null
   interactions?: Prisma.InteractionListRelationFilter
 }, "id" | "phone">
@@ -215,6 +235,8 @@ export type LeadOrderByWithAggregationInput = {
   name?: Prisma.SortOrderInput | Prisma.SortOrder
   consultantId?: Prisma.SortOrderInput | Prisma.SortOrder
   createdAt?: Prisma.SortOrder
+  uazapiToken?: Prisma.SortOrderInput | Prisma.SortOrder
+  redirectedAt?: Prisma.SortOrderInput | Prisma.SortOrder
   _count?: Prisma.LeadCountOrderByAggregateInput
   _max?: Prisma.LeadMaxOrderByAggregateInput
   _min?: Prisma.LeadMinOrderByAggregateInput
@@ -229,6 +251,8 @@ export type LeadScalarWhereWithAggregatesInput = {
   name?: Prisma.StringNullableWithAggregatesFilter<"Lead"> | string | null
   consultantId?: Prisma.StringNullableWithAggregatesFilter<"Lead"> | string | null
   createdAt?: Prisma.DateTimeWithAggregatesFilter<"Lead"> | Date | string
+  uazapiToken?: Prisma.StringNullableWithAggregatesFilter<"Lead"> | string | null
+  redirectedAt?: Prisma.DateTimeNullableWithAggregatesFilter<"Lead"> | Date | string | null
 }
 
 export type LeadCreateInput = {
@@ -236,6 +260,8 @@ export type LeadCreateInput = {
   phone: string
   name?: string | null
   createdAt?: Date | string
+  uazapiToken?: string | null
+  redirectedAt?: Date | string | null
   consultant?: Prisma.ConsultantCreateNestedOneWithoutLeadsInput
   interactions?: Prisma.InteractionCreateNestedManyWithoutLeadInput
 }
@@ -246,6 +272,8 @@ export type LeadUncheckedCreateInput = {
   name?: string | null
   consultantId?: string | null
   createdAt?: Date | string
+  uazapiToken?: string | null
+  redirectedAt?: Date | string | null
   interactions?: Prisma.InteractionUncheckedCreateNestedManyWithoutLeadInput
 }
 
@@ -254,6 +282,8 @@ export type LeadUpdateInput = {
   phone?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  uazapiToken?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  redirectedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   consultant?: Prisma.ConsultantUpdateOneWithoutLeadsNestedInput
   interactions?: Prisma.InteractionUpdateManyWithoutLeadNestedInput
 }
@@ -264,6 +294,8 @@ export type LeadUncheckedUpdateInput = {
   name?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   consultantId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  uazapiToken?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  redirectedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   interactions?: Prisma.InteractionUncheckedUpdateManyWithoutLeadNestedInput
 }
 
@@ -273,6 +305,8 @@ export type LeadCreateManyInput = {
   name?: string | null
   consultantId?: string | null
   createdAt?: Date | string
+  uazapiToken?: string | null
+  redirectedAt?: Date | string | null
 }
 
 export type LeadUpdateManyMutationInput = {
@@ -280,6 +314,8 @@ export type LeadUpdateManyMutationInput = {
   phone?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  uazapiToken?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  redirectedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
 }
 
 export type LeadUncheckedUpdateManyInput = {
@@ -288,6 +324,8 @@ export type LeadUncheckedUpdateManyInput = {
   name?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   consultantId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  uazapiToken?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  redirectedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
 }
 
 export type LeadListRelationFilter = {
@@ -306,6 +344,8 @@ export type LeadCountOrderByAggregateInput = {
   name?: Prisma.SortOrder
   consultantId?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
+  uazapiToken?: Prisma.SortOrder
+  redirectedAt?: Prisma.SortOrder
 }
 
 export type LeadMaxOrderByAggregateInput = {
@@ -314,6 +354,8 @@ export type LeadMaxOrderByAggregateInput = {
   name?: Prisma.SortOrder
   consultantId?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
+  uazapiToken?: Prisma.SortOrder
+  redirectedAt?: Prisma.SortOrder
 }
 
 export type LeadMinOrderByAggregateInput = {
@@ -322,6 +364,8 @@ export type LeadMinOrderByAggregateInput = {
   name?: Prisma.SortOrder
   consultantId?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
+  uazapiToken?: Prisma.SortOrder
+  redirectedAt?: Prisma.SortOrder
 }
 
 export type LeadScalarRelationFilter = {
@@ -375,6 +419,10 @@ export type NullableStringFieldUpdateOperationsInput = {
   set?: string | null
 }
 
+export type NullableDateTimeFieldUpdateOperationsInput = {
+  set?: Date | string | null
+}
+
 export type LeadCreateNestedOneWithoutInteractionsInput = {
   create?: Prisma.XOR<Prisma.LeadCreateWithoutInteractionsInput, Prisma.LeadUncheckedCreateWithoutInteractionsInput>
   connectOrCreate?: Prisma.LeadCreateOrConnectWithoutInteractionsInput
@@ -394,6 +442,8 @@ export type LeadCreateWithoutConsultantInput = {
   phone: string
   name?: string | null
   createdAt?: Date | string
+  uazapiToken?: string | null
+  redirectedAt?: Date | string | null
   interactions?: Prisma.InteractionCreateNestedManyWithoutLeadInput
 }
 
@@ -402,6 +452,8 @@ export type LeadUncheckedCreateWithoutConsultantInput = {
   phone: string
   name?: string | null
   createdAt?: Date | string
+  uazapiToken?: string | null
+  redirectedAt?: Date | string | null
   interactions?: Prisma.InteractionUncheckedCreateNestedManyWithoutLeadInput
 }
 
@@ -440,6 +492,8 @@ export type LeadScalarWhereInput = {
   name?: Prisma.StringNullableFilter<"Lead"> | string | null
   consultantId?: Prisma.StringNullableFilter<"Lead"> | string | null
   createdAt?: Prisma.DateTimeFilter<"Lead"> | Date | string
+  uazapiToken?: Prisma.StringNullableFilter<"Lead"> | string | null
+  redirectedAt?: Prisma.DateTimeNullableFilter<"Lead"> | Date | string | null
 }
 
 export type LeadCreateWithoutInteractionsInput = {
@@ -447,6 +501,8 @@ export type LeadCreateWithoutInteractionsInput = {
   phone: string
   name?: string | null
   createdAt?: Date | string
+  uazapiToken?: string | null
+  redirectedAt?: Date | string | null
   consultant?: Prisma.ConsultantCreateNestedOneWithoutLeadsInput
 }
 
@@ -456,6 +512,8 @@ export type LeadUncheckedCreateWithoutInteractionsInput = {
   name?: string | null
   consultantId?: string | null
   createdAt?: Date | string
+  uazapiToken?: string | null
+  redirectedAt?: Date | string | null
 }
 
 export type LeadCreateOrConnectWithoutInteractionsInput = {
@@ -479,6 +537,8 @@ export type LeadUpdateWithoutInteractionsInput = {
   phone?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  uazapiToken?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  redirectedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   consultant?: Prisma.ConsultantUpdateOneWithoutLeadsNestedInput
 }
 
@@ -488,6 +548,8 @@ export type LeadUncheckedUpdateWithoutInteractionsInput = {
   name?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   consultantId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  uazapiToken?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  redirectedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
 }
 
 export type LeadCreateManyConsultantInput = {
@@ -495,6 +557,8 @@ export type LeadCreateManyConsultantInput = {
   phone: string
   name?: string | null
   createdAt?: Date | string
+  uazapiToken?: string | null
+  redirectedAt?: Date | string | null
 }
 
 export type LeadUpdateWithoutConsultantInput = {
@@ -502,6 +566,8 @@ export type LeadUpdateWithoutConsultantInput = {
   phone?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  uazapiToken?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  redirectedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   interactions?: Prisma.InteractionUpdateManyWithoutLeadNestedInput
 }
 
@@ -510,6 +576,8 @@ export type LeadUncheckedUpdateWithoutConsultantInput = {
   phone?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  uazapiToken?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  redirectedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   interactions?: Prisma.InteractionUncheckedUpdateManyWithoutLeadNestedInput
 }
 
@@ -518,6 +586,8 @@ export type LeadUncheckedUpdateManyWithoutConsultantInput = {
   phone?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  uazapiToken?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  redirectedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
 }
 
 
@@ -557,6 +627,8 @@ export type LeadSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = r
   name?: boolean
   consultantId?: boolean
   createdAt?: boolean
+  uazapiToken?: boolean
+  redirectedAt?: boolean
   consultant?: boolean | Prisma.Lead$consultantArgs<ExtArgs>
   interactions?: boolean | Prisma.Lead$interactionsArgs<ExtArgs>
   _count?: boolean | Prisma.LeadCountOutputTypeDefaultArgs<ExtArgs>
@@ -568,6 +640,8 @@ export type LeadSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensio
   name?: boolean
   consultantId?: boolean
   createdAt?: boolean
+  uazapiToken?: boolean
+  redirectedAt?: boolean
   consultant?: boolean | Prisma.Lead$consultantArgs<ExtArgs>
 }, ExtArgs["result"]["lead"]>
 
@@ -577,6 +651,8 @@ export type LeadSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensio
   name?: boolean
   consultantId?: boolean
   createdAt?: boolean
+  uazapiToken?: boolean
+  redirectedAt?: boolean
   consultant?: boolean | Prisma.Lead$consultantArgs<ExtArgs>
 }, ExtArgs["result"]["lead"]>
 
@@ -586,9 +662,11 @@ export type LeadSelectScalar = {
   name?: boolean
   consultantId?: boolean
   createdAt?: boolean
+  uazapiToken?: boolean
+  redirectedAt?: boolean
 }
 
-export type LeadOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "phone" | "name" | "consultantId" | "createdAt", ExtArgs["result"]["lead"]>
+export type LeadOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "phone" | "name" | "consultantId" | "createdAt" | "uazapiToken" | "redirectedAt", ExtArgs["result"]["lead"]>
 export type LeadInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   consultant?: boolean | Prisma.Lead$consultantArgs<ExtArgs>
   interactions?: boolean | Prisma.Lead$interactionsArgs<ExtArgs>
@@ -613,6 +691,8 @@ export type $LeadPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs =
     name: string | null
     consultantId: string | null
     createdAt: Date
+    uazapiToken: string | null
+    redirectedAt: Date | null
   }, ExtArgs["result"]["lead"]>
   composites: {}
 }
@@ -1043,6 +1123,8 @@ export interface LeadFieldRefs {
   readonly name: Prisma.FieldRef<"Lead", 'String'>
   readonly consultantId: Prisma.FieldRef<"Lead", 'String'>
   readonly createdAt: Prisma.FieldRef<"Lead", 'DateTime'>
+  readonly uazapiToken: Prisma.FieldRef<"Lead", 'String'>
+  readonly redirectedAt: Prisma.FieldRef<"Lead", 'DateTime'>
 }
     
 

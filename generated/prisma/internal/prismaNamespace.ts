@@ -386,6 +386,7 @@ type FieldRefInputType<Model, FieldType> = Model extends never ? never : FieldRe
 export const ModelName = {
   Consultant: 'Consultant',
   Lead: 'Lead',
+  AppConfig: 'AppConfig',
   Interaction: 'Interaction',
   MessageTemplate: 'MessageTemplate',
   RoundRobinState: 'RoundRobinState'
@@ -404,7 +405,7 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
     omit: GlobalOmitOptions
   }
   meta: {
-    modelProps: "consultant" | "lead" | "interaction" | "messageTemplate" | "roundRobinState"
+    modelProps: "consultant" | "lead" | "appConfig" | "interaction" | "messageTemplate" | "roundRobinState"
     txIsolationLevel: TransactionIsolationLevel
   }
   model: {
@@ -553,6 +554,80 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
         count: {
           args: Prisma.LeadCountArgs<ExtArgs>
           result: runtime.Types.Utils.Optional<Prisma.LeadCountAggregateOutputType> | number
+        }
+      }
+    }
+    AppConfig: {
+      payload: Prisma.$AppConfigPayload<ExtArgs>
+      fields: Prisma.AppConfigFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.AppConfigFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$AppConfigPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.AppConfigFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$AppConfigPayload>
+        }
+        findFirst: {
+          args: Prisma.AppConfigFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$AppConfigPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.AppConfigFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$AppConfigPayload>
+        }
+        findMany: {
+          args: Prisma.AppConfigFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$AppConfigPayload>[]
+        }
+        create: {
+          args: Prisma.AppConfigCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$AppConfigPayload>
+        }
+        createMany: {
+          args: Prisma.AppConfigCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.AppConfigCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$AppConfigPayload>[]
+        }
+        delete: {
+          args: Prisma.AppConfigDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$AppConfigPayload>
+        }
+        update: {
+          args: Prisma.AppConfigUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$AppConfigPayload>
+        }
+        deleteMany: {
+          args: Prisma.AppConfigDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.AppConfigUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.AppConfigUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$AppConfigPayload>[]
+        }
+        upsert: {
+          args: Prisma.AppConfigUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$AppConfigPayload>
+        }
+        aggregate: {
+          args: Prisma.AppConfigAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateAppConfig>
+        }
+        groupBy: {
+          args: Prisma.AppConfigGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AppConfigGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.AppConfigCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AppConfigCountAggregateOutputType> | number
         }
       }
     }
@@ -834,10 +909,22 @@ export const LeadScalarFieldEnum = {
   phone: 'phone',
   name: 'name',
   consultantId: 'consultantId',
-  createdAt: 'createdAt'
+  createdAt: 'createdAt',
+  uazapiToken: 'uazapiToken',
+  redirectedAt: 'redirectedAt'
 } as const
 
 export type LeadScalarFieldEnum = (typeof LeadScalarFieldEnum)[keyof typeof LeadScalarFieldEnum]
+
+
+export const AppConfigScalarFieldEnum = {
+  key: 'key',
+  value: 'value',
+  description: 'description',
+  updatedAt: 'updatedAt'
+} as const
+
+export type AppConfigScalarFieldEnum = (typeof AppConfigScalarFieldEnum)[keyof typeof AppConfigScalarFieldEnum]
 
 
 export const InteractionScalarFieldEnum = {
@@ -1075,6 +1162,7 @@ export type PrismaClientOptions = ({
 export type GlobalOmitConfig = {
   consultant?: Prisma.ConsultantOmit
   lead?: Prisma.LeadOmit
+  appConfig?: Prisma.AppConfigOmit
   interaction?: Prisma.InteractionOmit
   messageTemplate?: Prisma.MessageTemplateOmit
   roundRobinState?: Prisma.RoundRobinStateOmit

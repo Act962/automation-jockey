@@ -53,6 +53,7 @@ export const AnyNull = runtime.AnyNull
 export const ModelName = {
   Consultant: 'Consultant',
   Lead: 'Lead',
+  AppConfig: 'AppConfig',
   Interaction: 'Interaction',
   MessageTemplate: 'MessageTemplate',
   RoundRobinState: 'RoundRobinState'
@@ -91,10 +92,22 @@ export const LeadScalarFieldEnum = {
   phone: 'phone',
   name: 'name',
   consultantId: 'consultantId',
-  createdAt: 'createdAt'
+  createdAt: 'createdAt',
+  uazapiToken: 'uazapiToken',
+  redirectedAt: 'redirectedAt'
 } as const
 
 export type LeadScalarFieldEnum = (typeof LeadScalarFieldEnum)[keyof typeof LeadScalarFieldEnum]
+
+
+export const AppConfigScalarFieldEnum = {
+  key: 'key',
+  value: 'value',
+  description: 'description',
+  updatedAt: 'updatedAt'
+} as const
+
+export type AppConfigScalarFieldEnum = (typeof AppConfigScalarFieldEnum)[keyof typeof AppConfigScalarFieldEnum]
 
 
 export const InteractionScalarFieldEnum = {

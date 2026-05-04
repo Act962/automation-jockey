@@ -52,6 +52,11 @@ export type Consultant = Prisma.ConsultantModel
  */
 export type Lead = Prisma.LeadModel
 /**
+ * Model AppConfig
+ * 
+ */
+export type AppConfig = Prisma.AppConfigModel
+/**
  * Model Interaction
  * 
  */
