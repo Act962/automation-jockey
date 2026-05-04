@@ -1,7 +1,5 @@
-import { timingSafeEqual } from "node:crypto";
-import type { FastifyPluginAsync } from "fastify";
 import { z } from "zod";
-import { env } from "../env.ts";
+import type { FastifyPluginAsyncZod } from "fastify-type-provider-zod";
 import { processIncomingMessage } from "../services/leads.ts";
 
 const messageSchema = z.object({
@@ -16,74 +14,75 @@ const messageSchema = z.object({
       messageType: z.string().optional(),
       text: z.string().nullish(),
       content: z
-        .object({
-          text: z.string().nullish(),
-          caption: z.string().nullish(),
-        })
-        .nullish(),
+        .any()
+        .nullish()
+        .describe("Texto ou objeto {text, caption} dependendo do messageType"),
     })
     .optional(),
   chat: z.object({ name: z.string().nullish() }).nullish(),
 });
 
-function checkSecret(provided: string | undefined): boolean {
-  if (!provided) return false;
-  const a = Buffer.from(provided);
-  const b = Buffer.from(env.WEBHOOK_SECRET);
-  if (a.length !== b.length) return false;
-  return timingSafeEqual(a, b);
-}
+const responseSchema = z.object({
+  ok: z.boolean(),
+  ignored: z.string().optional().describe("Motivo do evento ter sido ignorado"),
+  status: z.string().optional().describe("Status do processamento: created | duplicate"),
+});
 
 const TEXT_TYPES = new Set(["ExtendedTextMessage", "Conversation"]);
 
-export const webhookRoutes: FastifyPluginAsync = async (app) => {
-  app.post("/webhooks/uazapi", async (req, reply) => {
-    const headerSecret = req.headers["x-webhook-secret"];
-    const querySecret = (req.query as { secret?: string } | undefined)?.secret;
-    const provided = typeof headerSecret === "string" ? headerSecret : querySecret;
-    if (!checkSecret(provided)) {
-      return reply.code(401).send({ error: "unauthorized" });
-    }
+export const webhookRoutes: FastifyPluginAsyncZod = async (app) => {
+  app.post<{ Body: z.infer<typeof messageSchema> }>("/webhooks/uazapi", {
+    schema: {
+      tags: ["Webhooks"],
+      summary: "Recebe eventos do UAZAPI",
+      description:
+        "Endpoint chamado pelo UAZAPI para cada evento de mensagem recebida. Processa apenas mensagens de texto de leads externos e distribui via round-robin.",
+      body: messageSchema,
+      response: {
+        200: responseSchema,
+      },
+    },
+    async handler(req, reply) {
+      const json = req.body;
 
-    const parsed = messageSchema.safeParse(req.body);
-    if (!parsed.success) {
-      req.log.warn({ err: parsed.error.flatten() }, "invalid webhook payload");
-      return reply.code(200).send({ ok: true, ignored: "invalid_payload" });
-    }
-    const json = parsed.data;
+      if (json.EventType !== "messages") {
+        return reply.code(200).send({ ok: true, ignored: json.EventType });
+      }
+      const message = json.message;
+      if (!message || message.fromMe) {
+        return reply.code(200).send({ ok: true, ignored: "fromMe_or_empty" });
+      }
+      if (message.messageType && !TEXT_TYPES.has(message.messageType)) {
+        return reply
+          .code(200)
+          .send({ ok: true, ignored: `type:${message.messageType}` });
+      }
+      if (!json.token) {
+        req.log.warn("webhook without token; cannot reply via uazapi");
+        return reply.code(200).send({ ok: true, ignored: "no_token" });
+      }
 
-    if (json.EventType !== "messages") {
-      return reply.code(200).send({ ok: true, ignored: json.EventType });
-    }
-    const m = json.message;
-    if (!m || m.fromMe) {
-      return reply.code(200).send({ ok: true, ignored: "fromMe_or_empty" });
-    }
-    if (m.messageType && !TEXT_TYPES.has(m.messageType)) {
-      return reply.code(200).send({ ok: true, ignored: `type:${m.messageType}` });
-    }
-    if (!json.token) {
-      req.log.warn("webhook without token; cannot reply via uazapi");
-      return reply.code(200).send({ ok: true, ignored: "no_token" });
-    }
+      const phone = message.chatid.split("@")[0];
+      if (!phone) {
+        return reply.code(200).send({ ok: true, ignored: "no_phone" });
+      }
 
-    const phone = m.chatid.split("@")[0];
-    if (!phone) {
-      return reply.code(200).send({ ok: true, ignored: "no_phone" });
-    }
+      const contentText =
+        typeof message.content === "string"
+          ? message.content
+          : (message.content?.text ?? message.content?.caption);
+      const body = message.text ?? contentText ?? "";
+      const name = message.senderName ?? json.chat?.name ?? null;
 
-    const body =
-      m.text ?? m.content?.text ?? m.content?.caption ?? "";
-    const name = m.senderName ?? json.chat?.name ?? null;
+      const result = await processIncomingMessage({
+        phone,
+        name,
+        body,
+        messageId: message.messageid ?? null,
+        token: json.token,
+      });
 
-    const result = await processIncomingMessage({
-      phone,
-      name,
-      body,
-      messageId: m.messageid ?? null,
-      token: json.token,
-    });
-
-    return reply.code(200).send({ ok: true, ...result });
+      return reply.code(200).send({ ok: true, ...result });
+    },
   });
 };

@@ -1,5 +1,5 @@
 import { prisma } from "../db.ts";
-import { sendText } from "../http/uazapi.ts";
+import { sendContact, sendText } from "../http/uazapi.ts";
 import { assignLeadRoundRobin } from "./round-robin.ts";
 import { render } from "./template.ts";
 
@@ -60,8 +60,12 @@ export async function processIncomingMessage(input: Input): Promise<Result> {
     await prisma.interaction.create({
       data: { leadId: lead.id, direction: "out", body: text },
     });
+    await sendContact({ token, to: phone, fullName: consultant.name, phoneNumber: consultant.phone });
+    await prisma.interaction.create({
+      data: { leadId: lead.id, direction: "out", body: `[contact] ${consultant.name} <${consultant.phone}>` },
+    });
   } catch (err) {
-    console.error("[leads] uazapi sendText failed:", err);
+    console.error("[leads] uazapi send failed:", err);
   }
 
   return { status: "created", consultant };
