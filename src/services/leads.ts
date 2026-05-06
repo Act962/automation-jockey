@@ -1,5 +1,5 @@
 import { prisma } from "../db.ts";
-import { sendContact, sendText } from "../http/uazapi.ts";
+import { sendText } from "../http/uazapi.ts";
 import { assignLeadRoundRobin } from "./round-robin.ts";
 import { render } from "./template.ts";
 
@@ -40,30 +40,60 @@ export async function processIncomingMessage(input: Input): Promise<Result> {
     return { status: "created", consultant: null };
   }
 
-  const template = await prisma.messageTemplate.findUnique({
-    where: { key: "default_greeting" },
+  const templates = await prisma.messageTemplate.findMany({
+    where: { key: { in: ["default_greeting", "consultant_notification"] } },
   });
+  const greetingTemplate = templates.find((t) => t.key === "default_greeting");
+  const notificationTemplate = templates.find(
+    (t) => t.key === "consultant_notification",
+  );
 
-  if (!template) {
-    console.warn(`[leads] template default_greeting missing — skipping send`);
-    return { status: "created", consultant };
+  if (!greetingTemplate) {
+    console.warn(`[leads] template default_greeting missing — skipping lead reply`);
+  }
+  if (!notificationTemplate) {
+    console.warn(
+      `[leads] template consultant_notification missing — skipping consultant notify`,
+    );
   }
 
-  const text = render(template.body, {
-    leadName: name ?? "",
-    consultantName: consultant.name,
-    consultantPhone: consultant.phone,
-  });
-
   try {
-    await sendText({ token, to: phone, text });
-    await prisma.interaction.create({
-      data: { leadId: lead.id, direction: "out", body: text },
-    });
-    await sendContact({ token, to: phone, fullName: consultant.name, phoneNumber: consultant.phone });
-    await prisma.interaction.create({
-      data: { leadId: lead.id, direction: "out", body: `[contact] ${consultant.name} <${consultant.phone}>` },
-    });
+    if (greetingTemplate) {
+      const greeting = render(greetingTemplate.body, {
+        leadName: name ?? "",
+      });
+      await sendText({ token, to: phone, text: greeting });
+      await prisma.interaction.create({
+        data: { leadId: lead.id, direction: "out", body: greeting },
+      });
+    }
+
+    if (notificationTemplate) {
+      const notification = render(notificationTemplate.body, {
+        consultantName: consultant.name,
+        leadName: name ?? "",
+        leadPhone: phone,
+      });
+      await sendText({ token, to: consultant.phone, text: notification });
+      await prisma.interaction.create({
+        data: {
+          leadId: lead.id,
+          direction: "out",
+          body: `[notify-consultant] ${notification}`,
+        },
+      });
+
+      if (body) {
+        await sendText({ token, to: consultant.phone, text: body });
+        await prisma.interaction.create({
+          data: {
+            leadId: lead.id,
+            direction: "out",
+            body: `[forward-to-consultant] ${body}`,
+          },
+        });
+      }
+    }
   } catch (err) {
     console.error("[leads] uazapi send failed:", err);
   }
